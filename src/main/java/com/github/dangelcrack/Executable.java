@@ -1,7 +1,7 @@
 package com.github.dangelcrack;
 
-public class Main {
+public class Executable {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        App.main(args);
     }
 }
