@@ -1,7 +1,7 @@
 package com.github.dangelcrack.model.entity;
 
 public enum Scenes {
-    ROOT("view/root.fxml");
+    LOGIN("view/Login.fxml");
     private String url;
     /**
      * Constructor for the enum constant.

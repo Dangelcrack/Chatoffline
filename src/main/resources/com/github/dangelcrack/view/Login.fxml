@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.dangelcrack.controller.LoginController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox alignment="CENTER" spacing="15.0" layoutX="150.0" layoutY="100.0">
+        <children>
+            <Label text="Login" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+                <children>
+                    <Label text="Username:" minWidth="80" />
+                    <TextField fx:id="usernameField" promptText="Enter your username" />
+                </children>
+            </HBox>
+
+            <HBox spacing="10">
+                <children>
+                    <Label text="Password:" minWidth="80" />
+                    <PasswordField fx:id="passwordField" promptText="Enter your password" />
+                </children>
+            </HBox>
+
+            <Button text="Login" fx:id="loginButton" prefWidth="100.0" onAction="#handleLogin" />
+        </children>
+        <padding>
+            <Insets top="20.0" />
+        </padding>
+    </VBox>
+
+</AnchorPane>
