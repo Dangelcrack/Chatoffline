@@ -18,7 +18,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         View view = AppController.loadFXML(Scenes.LOGIN);
-        scene = new Scene(view.scene, 1105, 654);
+        scene = new Scene(view.scene, 1280, 720);
 
         // Verificar si el controlador es una instancia de AppController
         if (view.controller instanceof AppController) {

@@ -3,15 +3,15 @@ package com.github.dangelcrack.model.entity;
 import java.util.List;
 import java.util.Objects;
 
-public class user {
+public class User {
     private String username;
     private String password;
     private List<Message> listMessage;
 
-    public user() {
+    public User() {
     }
 
-    public user(String username, String password, List<Message> listMessage) {
+    public User(String username, String password, List<Message> listMessage) {
         this.username = username;
         this.password = password;
         this.listMessage = listMessage;
@@ -45,7 +45,7 @@ public class user {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        user user = (user) object;
+        User user = (User) object;
         return Objects.equals(username, user.username);
     }
 
@@ -56,7 +56,7 @@ public class user {
 
     @Override
     public String toString() {
-        return "user{" +
+        return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", listMessage=" + listMessage +

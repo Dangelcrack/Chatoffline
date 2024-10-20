@@ -9,12 +9,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dangelcrack.controller.LoginController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dangelcrack.controller.RegisterController">
 
     <!-- VBox centrado con anclajes -->
-    <VBox alignment="CENTER" spacing="15.0" maxWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+    <VBox alignment="CENTER" maxWidth="400.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
-            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Login" />
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="145.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Register" />
 
             <HBox alignment="CENTER" spacing="10">
                 <children>
@@ -33,7 +33,7 @@
             <HBox alignment="CENTER" spacing="10">
                 <children>
                     <Button fx:id="registerButton" onAction="#handleRegister" prefWidth="100.0" text="Register" />
-                    <Button fx:id="loginButton" onAction="#handleLogin" prefWidth="100.0" text="Login" />
+                    <Button fx:id="backButton" onAction="#handleBackToLogin" prefWidth="100.0" text="Back to Login" />
                 </children>
             </HBox>
         </children>
