@@ -3,22 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dangelcrack.controller.MainController">
 
-    <!-- VBox centrado con anclajes -->
-    <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox spacing="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
         <children>
-            <Label style="-fx-font-size: 36px; -fx-font-weight: bold;" text="Welcome to the Chat App!" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Chat App!" />
 
-            <Button fx:id="startChatButton" onAction="#handleStartChat" prefWidth="200.0" text="Start Chat" />
-            <Button fx:id="logoutButton" onAction="#handleLogout" prefWidth="200.0" text="Logout" />
+            <Label text="Friends List:" />
+            <ListView fx:id="friendsListView" onMouseClicked="#handleFriendSelected" />
+
+            <Button mnemonicParsing="false" onAction="#addFriend" style="-fx-font-family: 'Arial'; -fx-font-size: 15.0; -fx-font-style: italic; -fx-font-weight: bold; -fx-background-color: -fx-text-box-border, -fx-background; -fx-background-insets: 0, 0 0 1 0; -fx-background-radius: 0;" text="Add">
+            </Button>
+            <Button fx:id="startChatButton" text="Start Chat" onAction="#handleStartChatButton" />
+
+
+            <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout" />
         </children>
-        <padding>
-            <Insets top="50.0" />
-        </padding>
     </VBox>
 
 </AnchorPane>

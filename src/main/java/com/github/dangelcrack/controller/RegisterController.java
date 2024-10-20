@@ -42,7 +42,7 @@ public class RegisterController extends Controller {
         }
 
         // Registrar nuevo usuario
-        User newUser = new User(username, password, Collections.emptyList());
+        User newUser = new User(username, password, Collections.emptyList(), Collections.emptyList()); // Inicializar amigos como lista vacía
         userDAO.save(newUser);
 
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully.");

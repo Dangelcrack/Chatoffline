@@ -1,12 +1,19 @@
 package com.github.dangelcrack.model.dao;
 
-import com.github.dangelcrack.model.entity.User;
 import com.github.dangelcrack.model.entity.Message;
-import org.w3c.dom.*;
+import com.github.dangelcrack.model.entity.User;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
@@ -71,37 +78,40 @@ public class UserDAO implements DAO<User, String> {
     public User save(User user) {
         try {
             Element root = document.getDocumentElement();
-
-            // Crear el elemento "user"
             Element userElement = document.createElement("user");
 
-            // Agregar elementos con datos del usuario (nombre y contraseña)
+            // Crear el elemento de nombre de usuario
             Element username = document.createElement("username");
             username.appendChild(document.createTextNode(user.getUsername()));
             userElement.appendChild(username);
 
+            // Crear el elemento de contraseña
             Element password = document.createElement("password");
             password.appendChild(document.createTextNode(user.getPassword()));
             userElement.appendChild(password);
 
-            // Crear el elemento de los IDs de los mensajes
+            // Crear el elemento de mensajes
             Element messagesElement = document.createElement("messages");
             for (Message message : user.getListMessage()) {
-                // Guardar cada mensaje en el MessageDAO y obtener el ID o referencia del mensaje
                 Message savedMessage = messageDAO.save(message);
-
-                // Asumimos que el remitente + destinatario + fecha es un ID único para simplificar
                 Element messageIdElement = document.createElement("messageId");
                 messageIdElement.appendChild(document.createTextNode(savedMessage.getRemitent() + "-" + savedMessage.getDestinatary() + "-" + savedMessage.getDate()));
                 messagesElement.appendChild(messageIdElement);
             }
             userElement.appendChild(messagesElement);
 
+            // Crear el elemento de amigos
+            Element friendsElement = document.createElement("friends");
+            for (User friend : user.getFriends()) {
+                Element friendElement = document.createElement("friend");
+                friendElement.appendChild(document.createTextNode(friend.getUsername())); // Usar getUsername() para obtener el nombre de usuario del amigo
+                friendsElement.appendChild(friendElement);
+            }
+            userElement.appendChild(friendsElement);
+
+            // Agregar el nuevo usuario al documento XML
             root.appendChild(userElement);
-
-            // Guardar los cambios en el archivo XML
-            saveXML();
-
+            saveXML(); // Guardar el XML después de añadir el nuevo usuario
             return user;
 
         } catch (Exception e) {
@@ -160,12 +170,24 @@ public class UserDAO implements DAO<User, String> {
                         for (int j = 0; j < messageIds.getLength(); j++) {
                             String messageId = messageIds.item(j).getTextContent();
                             String[] parts = messageId.split("-");
-                            // Recuperar mensaje usando remitente, destinatario y fecha como ID
-                            Message message = messageDAO.findByName(parts[0]);  // Aquí puedes ajustar según tu MessageDAO
+                            Message message = messageDAO.findByName(parts[0]);
                             messages.add(message);
                         }
 
-                        return new User(userName, password, messages);
+                        // Obtener la lista de amigos
+                        List<User> friends = new ArrayList<>();
+                        NodeList friendNodes = element.getElementsByTagName("friend");
+                        for (int j = 0; j < friendNodes.getLength(); j++) {
+                            String friendUsername = friendNodes.item(j).getTextContent();
+                            User friend = findByName(friendUsername); // Llama a findByName para obtener el objeto User
+                            if (friend != null) {
+                                friends.add(friend);
+                            }
+                        }
+
+                        // Crear el objeto User con la nueva firma del constructor
+                        User userFound = new User(userName, password, messages, friends);
+                        return userFound;
                     }
                 }
             }
@@ -188,23 +210,42 @@ public class UserDAO implements DAO<User, String> {
                     String password = element.getElementsByTagName("password").item(0).getTextContent();
                     List<Message> messages = new ArrayList<>();
 
-                    // Obtener los IDs de los mensajes
                     NodeList messageIds = element.getElementsByTagName("messageId");
                     for (int j = 0; j < messageIds.getLength(); j++) {
                         String messageId = messageIds.item(j).getTextContent();
                         String[] parts = messageId.split("-");
-                        // Recuperar mensaje usando remitente, destinatario y fecha como ID
-                        Message message = messageDAO.findByName(parts[0]);  // Ajustar según tu lógica
+                        Message message = messageDAO.findByName(parts[0]);
                         messages.add(message);
                     }
 
-                    userList.add(new User(username, password, messages));
+                    // Obtener la lista de amigos
+                    List<User> friends = new ArrayList<>();
+                    NodeList friendNodes = element.getElementsByTagName("friend");
+                    for (int j = 0; j < friendNodes.getLength(); j++) {
+                        String friendUsername = friendNodes.item(j).getTextContent();
+                        User friend = findByName(friendUsername); // Llama a findByName para obtener el objeto User
+                        if (friend != null) {
+                            friends.add(friend);
+                        }
+                    }
+
+                    // Crear el objeto User con la nueva firma del constructor
+                    User user = new User(username, password, messages, friends);
+                    userList.add(user);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return userList;
+    }
+
+    public List<User> getFriendsForUser(User user) {
+        User foundUser = findByName(user.getUsername());
+        if (foundUser != null) {
+            return foundUser.getFriends(); // Devuelve la lista de amigos del usuario encontrado
+        }
+        return new ArrayList<>(); // Devuelve una lista vacía si no se encuentra el usuario
     }
 
     @Override

@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <users>
+        
     <user>
+                
         <username>dangel</username>
+                
+        <password>dangel</password>
+                
+        <messages/>
+            
+    </user>
+    
+    <user>
+        <username>dangel2</username>
         <password>dangel</password>
         <messages/>
+        <friends/>
     </user>
 </users>
