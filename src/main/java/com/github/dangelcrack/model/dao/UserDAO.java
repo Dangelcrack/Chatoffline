@@ -19,7 +19,9 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserDAO implements DAO<User, String> {
 
@@ -151,9 +153,17 @@ public class UserDAO implements DAO<User, String> {
         }
         return null;
     }
-
     @Override
     public User findByName(String username) {
+        return findByName(username, new HashSet<>());
+    }
+    private User findByName(String username, Set<String> processed) {
+        if (processed.contains(username)) {
+            return null;
+        }
+
+        processed.add(username); // Marcar este usuario como procesado
+
         try {
             NodeList users = document.getElementsByTagName("user");
             for (int i = 0; i < users.getLength(); i++) {
@@ -161,6 +171,7 @@ public class UserDAO implements DAO<User, String> {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
                     String userName = element.getElementsByTagName("username").item(0).getTextContent();
+
                     if (userName.equals(username)) {
                         String password = element.getElementsByTagName("password").item(0).getTextContent();
                         List<Message> messages = new ArrayList<>();
@@ -179,15 +190,15 @@ public class UserDAO implements DAO<User, String> {
                         NodeList friendNodes = element.getElementsByTagName("friend");
                         for (int j = 0; j < friendNodes.getLength(); j++) {
                             String friendUsername = friendNodes.item(j).getTextContent();
-                            User friend = findByName(friendUsername); // Llama a findByName para obtener el objeto User
+                            // No buscar amigos si ya fueron procesados
+                            User friend = findByName(friendUsername, processed);
                             if (friend != null) {
                                 friends.add(friend);
                             }
                         }
 
-                        // Crear el objeto User con la nueva firma del constructor
-                        User userFound = new User(userName, password, messages, friends);
-                        return userFound;
+                        // Crear el objeto User con la firma correcta
+                        return new User(userName, password, messages, friends);
                     }
                 }
             }
@@ -196,6 +207,7 @@ public class UserDAO implements DAO<User, String> {
         }
         return null;
     }
+
 
     @Override
     public List<User> findAll() {
@@ -252,4 +264,42 @@ public class UserDAO implements DAO<User, String> {
     public void close() throws IOException {
         // No es necesario hacer nada aquí ya que guardamos cada vez que modificamos el archivo
     }
+
+    public User authenticate(String username, String password) {
+        try {
+            NodeList users = document.getElementsByTagName("user");
+            for (int i = 0; i < users.getLength(); i++) {
+                Node node = users.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String userName = element.getElementsByTagName("username").item(0).getTextContent();
+                    String userPassword = element.getElementsByTagName("password").item(0).getTextContent();
+                    if (userName.equals(username) && userPassword.equals(password)) {
+                        List<Message> messages = new ArrayList<>();
+                        NodeList messageIds = element.getElementsByTagName("messageId");
+                        for (int j = 0; j < messageIds.getLength(); j++) {
+                            String messageId = messageIds.item(j).getTextContent();
+                            String[] parts = messageId.split("-");
+                            Message message = messageDAO.findByName(parts[0]);
+                            messages.add(message);
+                        }
+                        List<User> friends = new ArrayList<>();
+                        NodeList friendNodes = element.getElementsByTagName("friend");
+                        for (int j = 0; j < friendNodes.getLength(); j++) {
+                            String friendUsername = friendNodes.item(j).getTextContent();
+                            User friend = findByName(friendUsername); // Llama a findByName para obtener el objeto User
+                            if (friend != null) {
+                                friends.add(friend);
+                            }
+                        }
+                        return new User(userName, userPassword, messages, friends);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Devuelve null si no se encuentra un usuario que coincida
+    }
+
 }

@@ -3,9 +3,9 @@ package com.github.dangelcrack.model.entity;
 import com.github.dangelcrack.controller.AddFriendController;
 
 public enum Scenes {
-    MAIN("view/Main.fxml"),
-    LOGIN("view/Login.fxml"),
-    ADDFRIEND("view/AddFriend.fxml");
+    MAIN("/com/github/dangelcrack/view/Main.fxml"),
+    LOGIN("/com/github/dangelcrack/view/Login.fxml"),
+    ADDFRIEND("/com/github/dangelcrack/view/AddFriend.fxml");
     private String url;
     /**
      * Constructor for the enum constant.

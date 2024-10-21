@@ -17,6 +17,10 @@
             onAction="#handleSearchFriend" />
 
     <!-- ListView para mostrar la lista de usuarios disponibles -->
-    <ListView fx:id="usersListView" layoutX="50.0" layoutY="80.0" prefHeight="300.0" prefWidth="500.0" />
+    <ListView fx:id="usersListView" layoutX="50.0" layoutY="80.0" prefHeight="250.0" prefWidth="500.0" />
+
+    <!-- Botón para añadir el amigo seleccionado y cerrar la ventana -->
+    <Button fx:id="addFriendButton" layoutX="250.0" layoutY="350.0" text="Add Friend"
+            onAction="#addFriendAndCloseWindow" />
 
 </AnchorPane>

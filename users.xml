@@ -1,20 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <users>
+            
+    
+    <user>
+                        
         
+        <username>dangel2</username>
+                        
+        
+        <password>dangel</password>
+                        
+        
+        <messages/>
+                        
+        
+        <friends>
+                                    
+            
+            <friend>dangel</friend>
+                                
+        
+        </friends>
+                    
+    
+    </user>
+            
+    
+    <user>
+                        
+        
+        <username>dangel</username>
+                        
+        
+        <password>dangel</password>
+                        
+        
+        <messages/>
+                        
+        
+        <friends>
+                                    
+            
+            <friend>dangel2</friend>
+                                
+        
+        </friends>
+                    
+    
+    </user>
+        
+    
     <user>
                 
-        <username>dangel</username>
+        <username>unai</username>
                 
-        <password>dangel</password>
+        <password>unai</password>
                 
         <messages/>
+                
+        <friends/>
             
     </user>
     
     <user>
-        <username>dangel2</username>
-        <password>dangel</password>
+        <username>unai</username>
+        <password>unai</password>
         <messages/>
-        <friends/>
+        <friends>
+            <friend>unai</friend>
+        </friends>
+    </user>
+    <user>
+        <username>unai</username>
+        <password>unai</password>
+        <messages/>
+        <friends>
+            <friend>unai</friend>
+        </friends>
     </user>
 </users>
