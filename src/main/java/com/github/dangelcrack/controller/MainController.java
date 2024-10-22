@@ -114,7 +114,7 @@ public class MainController extends Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Chat.fxml"));
             Parent chatRoot = loader.load();
             ChatController chatController = loader.getController();
-            chatController.setFriendName(friendName); // Establecer el nombre del amigo
+            chatController.onOpen(new Object[]{currentUser, friendName});
             Scene chatScene = new Scene(chatRoot);
             Stage currentStage = (Stage) startChatButton.getScene().getWindow();
             currentStage.setScene(chatScene);

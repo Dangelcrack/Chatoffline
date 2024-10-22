@@ -81,18 +81,12 @@ public class UserDAO implements DAO<User, String> {
         try {
             Element root = document.getDocumentElement();
             Element userElement = document.createElement("user");
-
-            // Crear el elemento de nombre de usuario
             Element username = document.createElement("username");
             username.appendChild(document.createTextNode(user.getUsername()));
             userElement.appendChild(username);
-
-            // Crear el elemento de contraseña
             Element password = document.createElement("password");
             password.appendChild(document.createTextNode(user.getPassword()));
             userElement.appendChild(password);
-
-            // Crear el elemento de mensajes
             Element messagesElement = document.createElement("messages");
             for (Message message : user.getListMessage()) {
                 Message savedMessage = messageDAO.save(message);
@@ -101,8 +95,6 @@ public class UserDAO implements DAO<User, String> {
                 messagesElement.appendChild(messageIdElement);
             }
             userElement.appendChild(messagesElement);
-
-            // Crear el elemento de amigos
             Element friendsElement = document.createElement("friends");
             for (User friend : user.getFriends()) {
                 Element friendElement = document.createElement("friend");

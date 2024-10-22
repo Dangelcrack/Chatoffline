@@ -99,13 +99,19 @@ public class AddFriendController extends Controller implements Initializable {
     @FXML
     private void addFriendAndCloseWindow(Event event) {
         String selectedUser = usersListView.getSelectionModel().getSelectedItem();
+
         if (selectedUser != null && !selectedUser.isEmpty()) {
             User friend = userDAO.findByName(selectedUser);
+
             if (friend != null && !currentUser.getFriends().contains(friend)) {
-                this.currentUser.addFriend(friend);
-                friend.addFriend(this.currentUser);
-                userDAO.save(friend);
-                userDAO.save(currentUser);
+                currentUser.addFriend(friend);
+                User friendnew = friend;
+                User usernew= currentUser;
+                friendnew.addFriend(usernew);
+                userDAO.delete(currentUser);
+                userDAO.delete(friend);
+                userDAO.save(usernew);
+                userDAO.save(friendnew);
                 System.out.println("Amigo " + friend.getUsername() + " añadido correctamente.");
             } else {
                 System.out.println("El usuario ya es tu amigo o no existe.");
@@ -113,6 +119,7 @@ public class AddFriendController extends Controller implements Initializable {
         }
         ((Node) (event.getSource())).getScene().getWindow().hide();
     }
+
     /**
      * Handles the closing of the window. It closes the window when triggered.
      */

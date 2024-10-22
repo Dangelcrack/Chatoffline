@@ -35,7 +35,6 @@ public class MessageDAO implements DAO<Message, String> {
             document = dBuilder.parse(xmlFile);
             document.getDocumentElement().normalize();
         } else {
-            // Si el archivo no existe, crear uno nuevo
             createXML();
         }
     }
@@ -45,16 +44,10 @@ public class MessageDAO implements DAO<Message, String> {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
         document = documentBuilder.newDocument();
-
-        // Crear el elemento raíz
         Element root = document.createElement("messages");
         document.appendChild(root);
-
-        // Guardar el nuevo documento XML
         saveXML();
     }
-
-    // Guardar el documento XML en el archivo
     private void saveXML() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -68,14 +61,10 @@ public class MessageDAO implements DAO<Message, String> {
     public Message save(Message message) {
         try {
             Element root = document.getDocumentElement();
-
-            // Crear el elemento "message"
             Element messageElement = document.createElement("message");
-
             Element remitent = document.createElement("remitent");
             remitent.appendChild(document.createTextNode(message.getRemitent()));
             messageElement.appendChild(remitent);
-
             Element destinatary = document.createElement("destinatary");
             destinatary.appendChild(document.createTextNode(message.getDestinatary()));
             messageElement.appendChild(destinatary);
