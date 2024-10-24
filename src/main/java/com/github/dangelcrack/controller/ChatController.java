@@ -4,17 +4,23 @@ import com.github.dangelcrack.model.dao.MessageDAO;
 import com.github.dangelcrack.model.entity.Message;
 import com.github.dangelcrack.model.entity.Scenes;
 import com.github.dangelcrack.model.entity.User;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -149,7 +155,55 @@ public class ChatController extends Controller {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleExportConversation(ActionEvent event) {
+        // Open a file chooser dialog to let the user select where to save the file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Conversation");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
+        // Suggest a default file name
+        fileChooser.setInitialFileName("conversation.txt");
+
+        Path filePath = fileChooser.showSaveDialog(messageListView.getScene().getWindow()).toPath();
+
+        if (filePath != null) {
+            exportConversationToFile(filePath);
+        }
+    }
+
+    // Method to export the conversation to a file
+    private void exportConversationToFile(Path filePath) {
+        try {
+            // Get all messages from the ListView and join them as lines
+            ObservableList<String> messages = messageListView.getItems();
+
+            // Create the file with the conversation content
+            List<String> messageLines = messages.stream()
+                    .map(String::toString)
+                    .collect(Collectors.toList());
+
+            // Write the conversation to the selected file
+            Files.write(filePath, messageLines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            // Show success alert
+            showAlert(Alert.AlertType.INFORMATION, "Export Successful", "Conversation exported successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Export Failed", "Could not export the conversation.");
+        }
+    }
+
+    // Helper method to show alert messages
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
     /**
      * Handles actions when closing the window (if needed).
      *

@@ -36,6 +36,10 @@
                 <Button fx:id="backButton" text="Back to Main" onAction="#handleBackToMain"
                         style="-fx-background-color: linear-gradient(to right, #2196F3, #0D47A1); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
             </HBox>
+            <HBox spacing="10.0" alignment="CENTER_RIGHT">
+                <Button fx:id="exportButton" text="Export Conversation" onAction="#handleExportConversation"
+                        style="-fx-background-color: linear-gradient(to right, #FF9800, #F57C00); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
+            </HBox>
         </children>
     </VBox>
 </AnchorPane>
