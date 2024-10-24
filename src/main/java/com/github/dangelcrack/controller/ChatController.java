@@ -17,6 +17,8 @@ import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -155,48 +157,89 @@ public class ChatController extends Controller {
             e.printStackTrace();
         }
     }
+    /**
+     * Opens a file dialog to let the user export the conversation history to a CSV file.
+     * The default file name is set based on the current user and friend's name.
+     * If the user selects a valid location, the conversation is saved in CSV format.
+     */
     @FXML
-    private void handleExportConversation(ActionEvent event) {
-        // Open a file chooser dialog to let the user select where to save the file
+    private void handleExportConversation() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Conversation");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-
-        // Suggest a default file name
-        fileChooser.setInitialFileName("conversation.txt");
-
-        Path filePath = fileChooser.showSaveDialog(messageListView.getScene().getWindow()).toPath();
-
-        if (filePath != null) {
-            exportConversationToFile(filePath);
+        fileChooser.setInitialFileName("conversation_" + currentUser.getUsername() + "_" + friendName + ".csv");
+        File file = fileChooser.showSaveDialog(messageListView.getScene().getWindow());
+        if (file != null) {
+            exportConversationToFile(file.toPath());
         }
     }
 
-    // Method to export the conversation to a file
+    /**
+     * Exports the conversation to the given file path in CSV format.
+     * It writes the messages, including the sender, message content, and timestamp, to the CSV file.
+     * A header ("Sender,Message,Timestamp") is included.
+     * If an error occurs during writing, an alert is shown to the user.
+     *
+     * @param filePath the path where the conversation CSV will be saved
+     */
     private void exportConversationToFile(Path filePath) {
-        try {
-            // Get all messages from the ListView and join them as lines
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             ObservableList<String> messages = messageListView.getItems();
-
-            // Create the file with the conversation content
-            List<String> messageLines = messages.stream()
-                    .map(String::toString)
-                    .collect(Collectors.toList());
-
-            // Write the conversation to the selected file
-            Files.write(filePath, messageLines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-            // Show success alert
+            writer.write("Sender,Message,Timestamp\n"); // CSV Header
+            messages.stream()
+                    .map(this::formatMessage)
+                    .forEach(message -> {
+                        try {
+                            writer.write(message);
+                            writer.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
             showAlert(Alert.AlertType.INFORMATION, "Export Successful", "Conversation exported successfully!");
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Export Failed", "Could not export the conversation.");
         }
     }
 
-    // Helper method to show alert messages
+    /**
+     * Formats a message string by extracting the sender, message content, and timestamp.
+     * Returns the message formatted as a CSV line with the sender, content, and timestamp.
+     * If the message format is invalid, it returns the original message.
+     *
+     * @param message the raw message string
+     * @return the formatted CSV line with sender, content, and timestamp
+     */
+    private String formatMessage(String message) {
+        try {
+            int firstBracketIndex = message.indexOf('[');
+            int secondBracketIndex = message.indexOf(']', firstBracketIndex);
+            int colonIndex = message.indexOf(':', secondBracketIndex);
+
+            if (firstBracketIndex == -1 || secondBracketIndex == -1 || colonIndex == -1) {
+                return message;
+            }
+
+            String timestamp = message.substring(firstBracketIndex + 1, secondBracketIndex);
+            String sender = message.substring(secondBracketIndex + 1, colonIndex).trim();
+            String content = message.substring(colonIndex + 1).trim();
+
+            return String.format("%s,\"%s\",%s", sender, content, timestamp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return message;
+        }
+    }
+
+    /**
+     * Displays an alert dialog to the user with the specified title and message.
+     * The type of alert (information, error, etc.) is determined by the alertType parameter.
+     *
+     * @param alertType the type of alert to show (e.g., information, error)
+     * @param title the title of the alert dialog
+     * @param message the message to display in the alert
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -204,6 +247,7 @@ public class ChatController extends Controller {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     /**
      * Handles actions when closing the window (if needed).
      *
