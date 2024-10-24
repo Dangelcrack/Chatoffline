@@ -1,270 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <messages>
-                        
-    
-    
-    
-    
-    <message>
-                                                
-        
-        
-        
-        
-        <remitent>You</remitent>
-                                                
-        
-        
-        
-        
-        <destinatary>dangel2</destinatary>
-                                                
-        
-        
-        
-        
-        <contains>hello
-</contains>
-                                                
-        
-        
-        
-        
-        <date>2024-10-22 10:20:00</date>
-                                            
-    
-    
-    
-    
-    </message>
-                        
-    
-    
-    
-    
-    <message>
-                                                
-        
-        
-        
-        
-        <remitent>dangel2</remitent>
-                                                
-        
-        
-        
-        
-        <destinatary>You</destinatary>
-                                                
-        
-        
-        
-        
-        <contains>This is an auto-reply!</contains>
-                                                
-        
-        
-        
-        
-        <date>2024-10-22 10:20:00</date>
-                                            
-    
-    
-    
-    
-    </message>
-                    
-    
-    
-    
-    
-    <message>
-                                        
-        
-        
-        
-        <remitent/>
-                                        
-        
-        
-        
-        <destinatary>dangel2</destinatary>
-                                        
-        
-        
-        
-        <contains>eh
-</contains>
-                                        
-        
-        
-        
-        <date>2024-10-22 10:30:46</date>
-                                    
-    
-    
-    
-    </message>
-                    
-    
-    
-    
-    <message>
-                                        
-        
-        
-        
-        <remitent>dangel2</remitent>
-                                        
-        
-        
-        
-        <destinatary/>
-                                        
-        
-        
-        
-        <contains>Auto-reply from dangel2!</contains>
-                                        
-        
-        
-        
-        <date>2024-10-22 10:30:46</date>
-                                    
-    
-    
-    
-    </message>
-                    
-    
-    
-    
-    <message>
-                                        
-        
-        
-        
-        <remitent/>
-                                        
-        
-        
-        
-        <destinatary>dangel2</destinatary>
-                                        
-        
-        
-        
-        <contains>eh
-</contains>
-                                        
-        
-        
-        
-        <date>2024-10-22 10:36:16</date>
-                                    
-    
-    
-    
-    </message>
-                    
-    
-    
-    
-    <message>
-                                        
-        
-        
-        
-        <remitent>dangel2</remitent>
-                                        
-        
-        
-        
-        <destinatary/>
-                                        
-        
-        
-        
-        <contains>Auto-reply from dangel2!</contains>
-                                        
-        
-        
-        
-        <date>2024-10-22 10:36:16</date>
-                                    
-    
-    
-    
-    </message>
-                
-    
-    
-    
-    <message>
-                                
-        
-        
-        <remitent>dangel</remitent>
-                                
-        
-        
-        <destinatary>dangel2</destinatary>
-                                
-        
-        
-        <contains>hey</contains>
-                                
-        
-        
-        <date>2024-10-22 12:00:43</date>
-                            
-    
-    
-    </message>
-                
-    
-    
-    <message>
-                                
-        
-        
-        <remitent>dangel2</remitent>
-                                
-        
-        
-        <destinatary>dangel</destinatary>
-                                
-        
-        
-        <contains>Auto-reply from dangel2!</contains>
-                                
-        
-        
-        <date>2024-10-22 12:00:43</date>
-                            
-    
-    
-    </message>
             
     
-    
-    <message>
-                        
-        
-        <remitent>dangel2</remitent>
-                        
-        
-        <destinatary>dangel</destinatary>
-                        
-        
-        <contains>hola</contains>
-                        
-        
-        <date>2024-10-22 12:01:16</date>
-                    
-    
-    </message>
-            
     
     <message>
                         
@@ -272,13 +9,13 @@
         <remitent>dangel</remitent>
                         
         
-        <destinatary>dangel2</destinatary>
+        <destinatary>jesus</destinatary>
                         
         
-        <contains>Auto-reply from dangel!</contains>
+        <contains>hola jesus</contains>
                         
         
-        <date>2024-10-22 12:01:16</date>
+        <date>2024-10-24 17:50:24</date>
                     
     
     </message>
@@ -286,20 +23,21 @@
     
     <message>
                 
-        <remitent>dangel</remitent>
+        <remitent>jesus</remitent>
                 
-        <destinatary>dangel2</destinatary>
+        <destinatary>dangel</destinatary>
                 
-        <contains>puto</contains>
+        <contains>hola dangel</contains>
                 
-        <date>2024-10-22 12:04:17</date>
+        <date>2024-10-24 17:50:40</date>
             
     </message>
     
     <message>
-        <remitent>dangel2</remitent>
-        <destinatary>dangel</destinatary>
-        <contains>amo</contains>
-        <date>2024-10-22 12:05:01</date>
+        <remitent>dangel</remitent>
+        <destinatary>jesus</destinatary>
+        <contains>como andamios?
+</contains>
+        <date>2024-10-24 17:51:00</date>
     </message>
 </messages>

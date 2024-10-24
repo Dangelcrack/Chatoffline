@@ -8,32 +8,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dangelcrack.controller.RegisterController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.dangelcrack.controller.RegisterController"
+            style="-fx-background-color: linear-gradient(to bottom right, #D9EAD3, #A2C4C9);">
 
-    <!-- VBox centrado con anclajes -->
-    <VBox alignment="CENTER" maxWidth="400.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox alignment="CENTER" spacing="20.0" maxWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
         <children>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="145.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Register" />
+            <Text text="Register" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-fill: #075E54;">
+                <Font fx:id="titleFont" name="Arial" size="26"/>
+            </Text>
 
             <HBox alignment="CENTER" spacing="10">
                 <children>
                     <Label minWidth="80" text="Username:" />
-                    <TextField fx:id="usernameField" promptText="Enter your username" />
+                    <TextField fx:id="usernameField" promptText="Enter your username"
+                               style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #FFFFFF; -fx-padding: 10; -fx-font-size: 14;"/>
                 </children>
             </HBox>
 
             <HBox alignment="CENTER" spacing="10">
                 <children>
                     <Label minWidth="80" text="Password:" />
-                    <PasswordField fx:id="passwordField" promptText="Enter your password" />
+                    <PasswordField fx:id="passwordField" promptText="Enter your password"
+                                   style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #FFFFFF; -fx-padding: 10; -fx-font-size: 14;"/>
                 </children>
             </HBox>
 
             <HBox alignment="CENTER" spacing="10">
                 <children>
-                    <Button fx:id="registerButton" onAction="#handleRegister" prefWidth="100.0" text="Register" />
-                    <Button fx:id="backButton" onAction="#handleBackToLogin" prefWidth="100.0" text="Back to Login" />
+                    <Button fx:id="registerButton" onAction="#handleRegister" text="Register"
+                            style="-fx-background-color: linear-gradient(to right, #25D366, #128C7E); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
+                    <Button fx:id="backButton" onAction="#handleBackToLogin" text="Back to Login"
+                            style="-fx-background-color: linear-gradient(to right, #2196F3, #0D47A1); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
                 </children>
             </HBox>
         </children>

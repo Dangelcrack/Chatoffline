@@ -6,23 +6,40 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dangelcrack.controller.MainController">
+<?import javafx.scene.layout.HBox?>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.dangelcrack.controller.MainController"
+            style="-fx-background-color: linear-gradient(to bottom right, #D9EAD3, #A2C4C9);">
 
-    <VBox spacing="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+    <VBox spacing="20.0" AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
         <children>
-            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Welcome to the Chat App!" />
+            <Text text="Welcome to the Chat App!" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-fill: #075E54;">
+                <Font fx:id="titleFont" name="Arial" size="26"/>
+            </Text>
 
-            <Label text="Friends List:" />
-            <ListView fx:id="friendsListView" onMouseClicked="#handleFriendSelected" />
+            <Label text="Friends List:" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+            <ListView fx:id="friendsListView" onMouseClicked="#handleFriendSelected"
+                      style="-fx-background-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10;"/>
 
-            <Button mnemonicParsing="false" onAction="#addFriend" style="-fx-font-family: 'Arial'; -fx-font-size: 15.0; -fx-font-style: italic; -fx-font-weight: bold; -fx-background-color: -fx-text-box-border, -fx-background; -fx-background-insets: 0, 0 0 1 0; -fx-background-radius: 0;" text="Add">
-            </Button>
-            <Button fx:id="startChatButton" text="Start Chat" onAction="#handleStartChatButton" />
+            <HBox spacing="10" alignment="CENTER">
+                <children>
+                    <Button fx:id="addFriendButton" onAction="#addFriend" text="Add Friend"
+                            style="-fx-background-color: linear-gradient(to right, #25D366, #128C7E); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
 
+                    <Button fx:id="startChatButton" text="Start Chat" onAction="#handleStartChatButton"
+                            style="-fx-background-color: linear-gradient(to right, #2196F3, #0D47A1); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
 
-            <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout" />
+                    <Button fx:id="logoutButton" onAction="#handleLogout" text="Logout"
+                            style="-fx-background-color: linear-gradient(to right, #F44336, #C62828); -fx-text-fill: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
+                </children>
+            </HBox>
         </children>
+        <padding>
+            <Insets top="20.0" />
+        </padding>
     </VBox>
 
 </AnchorPane>

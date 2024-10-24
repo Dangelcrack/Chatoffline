@@ -16,46 +16,70 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * Controller responsible for managing the registration process for new users.
+ */
 public class RegisterController extends Controller {
 
     @FXML
-    private TextField usernameField;
+    private TextField usernameField;  // Field to input username
 
     @FXML
-    private PasswordField passwordField;
+    private PasswordField passwordField;  // Field to input password
 
-    private UserDAO userDAO;
+    private UserDAO userDAO;  // Data Access Object for managing user data
 
+    /**
+     * Constructor that initializes the UserDAO for user management.
+     */
     public RegisterController() {
-        userDAO = new UserDAO(); // Inicializamos el DAO para gestionar usuarios
+        userDAO = new UserDAO();  // Initialize the DAO for managing users
     }
 
+    /**
+     * Handles the user registration when the 'Register' button is clicked.
+     * It checks if the username already exists, creates a new user if it does not,
+     * and redirects to the login screen upon successful registration.
+     *
+     * @param actionEvent Event triggered by the register button.
+     */
     @FXML
     public void handleRegister(ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // Verificar si el usuario ya existe
+        // Check if the username already exists
         if (userDAO.findByName(username) != null) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "Username already exists.");
             return;
         }
 
-        // Registrar nuevo usuario
-        User newUser = new User(username, password, Collections.emptyList(), Collections.emptyList()); // Inicializar amigos como lista vacía
+        // Register the new user
+        User newUser = new User(username, password, Collections.emptyList(), Collections.emptyList());  // Initialize friends list as empty
         userDAO.save(newUser);
 
+        // Show success message
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully.");
 
-        // Redirigir a la pantalla de inicio de sesión después del registro
+        // Redirect to the login screen after successful registration
         openLoginView(actionEvent);
     }
 
+    /**
+     * Handles the action to go back to the login screen when the 'Back' button is clicked.
+     *
+     * @param actionEvent Event triggered by the back button.
+     */
     @FXML
     public void handleBackToLogin(ActionEvent actionEvent) {
         openLoginView(actionEvent);
     }
 
+    /**
+     * Opens the login view after registration or when the user wants to go back to the login screen.
+     *
+     * @param actionEvent The event triggered by clicking the login or back button.
+     */
     private void openLoginView(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Login.fxml"));
@@ -70,6 +94,13 @@ public class RegisterController extends Controller {
         }
     }
 
+    /**
+     * Displays an alert dialog with the specified type, title, and message.
+     *
+     * @param alertType The type of alert (e.g., INFORMATION, ERROR).
+     * @param title The title of the alert dialog.
+     * @param message The content message of the alert dialog.
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -78,13 +109,23 @@ public class RegisterController extends Controller {
         alert.showAndWait();
     }
 
+    /**
+     * This method is called when the registration view is opened.
+     *
+     * @param input Optional input when opening the registration view.
+     */
     @Override
     public void onOpen(Object input) {
-        // Lógica cuando se abre la vista de registro
+        // Logic when the registration view is opened
     }
 
+    /**
+     * This method is called when the registration view is closed.
+     *
+     * @param output Optional output when closing the registration view.
+     */
     @Override
     public void onClose(Object output) {
-        // Lógica cuando se cierra la vista de registro
+        // Logic when the registration view is closed
     }
 }

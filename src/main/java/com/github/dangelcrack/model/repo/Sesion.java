@@ -2,46 +2,71 @@ package com.github.dangelcrack.model.repo;
 
 import com.github.dangelcrack.model.entity.User;
 
+/**
+ * The Sesion class represents a singleton session for a logged-in user.
+ * It contains methods to manage user sessions, including starting and closing sessions.
+ */
 public class Sesion {
-    //Atributos de la clase
     private static Sesion _instance;
     private User user;
 
-    // Constructor privado para evitar la creación de instancias directamente
+    /**
+     * Private constructor to prevent direct instantiation.
+     *
+     * @param user the user associated with the session
+     */
     private Sesion(User user) {
         this.user = user;
     }
 
-    // Método para iniciar sesión con una persona
+    /**
+     * Initiates a session for the specified user.
+     * If a session already exists, it will not create a new one.
+     *
+     * @param user the user to log in
+     */
     public static void iniciateSesion(User user) {
         if (_instance == null) {
             _instance = new Sesion(user);
-        } else {
-            System.out.println("Ya hay una sesión activa. Cierra la sesión actual antes de iniciar una nueva.");
         }
     }
 
+    /**
+     * Returns the current session instance.
+     *
+     * @return the current Sesion instance
+     */
     public static Sesion getInstance() {
         return _instance;
     }
 
-    //Constructor vacio
+    /**
+     * Private default constructor to prevent direct instantiation.
+     */
     private Sesion() {
     }
-    //Constructor con los atributos
 
-
-    //Getter de persona
+    /**
+     * Gets the user associated with the session.
+     *
+     * @return the user of the session
+     */
     public User getUser() {
         return user;
     }
 
-    //Setter de persona
+    /**
+     * Sets the user for the session.
+     *
+     * @param user the user to set
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
-    //Funcion que cierra la sesion del usuario
+    /**
+     * Closes the current session, setting the instance to null.
+     */
     public static void closeSession() {
         _instance = null;
     }

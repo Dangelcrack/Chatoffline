@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.github.dangelcrack.controller.AddFriendController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="720.0" prefWidth="1280.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #D9EAD3, #A2C4C9);">
 
-    <!-- Campo de texto para ingresar el nombre a buscar -->
-    <TextField fx:id="searchTextField" layoutX="50.0" layoutY="30.0" prefWidth="300.0" promptText="Enter friend name" />
+    <VBox spacing="20" alignment="CENTER"
+          prefWidth="400.0" prefHeight="600.0"
+          AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50">
+        <!-- Título de la ventana -->
+        <Text text="Add a Friend" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-fill: #075E54;">
+            <Font fx:id="titleFont" name="Arial" size="26"/>
+        </Text>
 
-    <!-- Botón para realizar la búsqueda -->
-    <Button fx:id="searchButton" layoutX="370.0" layoutY="30.0" text="Search"
-            onAction="#handleSearchFriend" />
+        <!-- Contenedor para la barra de búsqueda y el botón de búsqueda -->
+        <HBox spacing="10" alignment="CENTER">
+            <!-- Campo de texto para ingresar el nombre a buscar -->
+            <TextField fx:id="searchTextField" promptText="Enter friend name"
+                       style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #FFFFFF; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-border-color: #CCCCCC; -fx-border-width: 1;"
+                       HBox.hgrow="ALWAYS"/>
 
-    <!-- ListView para mostrar la lista de usuarios disponibles -->
-    <ListView fx:id="usersListView" layoutX="50.0" layoutY="80.0" prefHeight="250.0" prefWidth="500.0" />
+            <!-- Botón para realizar la búsqueda -->
+            <Button fx:id="searchButton" text="Search" onAction="#handleSearchFriend"
+                    style="-fx-background-color: linear-gradient(to right, #25D366, #128C7E); -fx-text-fill: white; -fx-border-radius: 25; -fx-background-radius: 25; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
+        </HBox>
 
-    <!-- Botón para añadir el amigo seleccionado y cerrar la ventana -->
-    <Button fx:id="addFriendButton" layoutX="250.0" layoutY="350.0" text="Add Friend"
-            onAction="#addFriendAndCloseWindow" />
+        <!-- ListView para mostrar la lista de usuarios disponibles -->
+        <ListView fx:id="usersListView" prefHeight="500.0"
+                  style="-fx-background-color: #FFFFFF; -fx-border-radius: 25; -fx-background-radius: 25; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI';"/>
 
+        <!-- Botón para añadir el amigo seleccionado y cerrar la ventana -->
+        <Button fx:id="addFriendButton" text="Add Friend" onAction="#addFriendAndCloseWindow"
+                style="-fx-background-color: linear-gradient(to right, #2196F3, #0D47A1); -fx-text-fill: white; -fx-border-radius: 25; -fx-background-radius: 25; -fx-padding: 10; -fx-font-size: 16; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;"/>
+    </VBox>
 </AnchorPane>

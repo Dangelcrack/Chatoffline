@@ -8,7 +8,6 @@ import com.github.dangelcrack.App;
 import com.github.dangelcrack.model.dao.UserDAO;
 import com.github.dangelcrack.model.entity.Scenes;
 import com.github.dangelcrack.model.entity.User;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,12 +21,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller responsible for handling the main view where the user can manage friends,
+ * start chats, and log out.
+ */
 public class MainController extends Controller {
 
     @FXML
     private ListView<User> friendsListView;
-    @FXML
-    private Button addFriendButton;
     @FXML
     private Button startChatButton;
     @FXML
@@ -36,85 +37,100 @@ public class MainController extends Controller {
     private UserDAO userDAO;
     private List<User> friendsList;
     private User currentUser;
+
+    /**
+     * Constructor that initializes the UserDAO and friends list.
+     */
     public MainController() {
         this.friendsList = new ArrayList<>();
-        this.userDAO = new UserDAO(); // Inicializar el UserDAO
+        this.userDAO = new UserDAO();  // Initialize the UserDAO
     }
 
+    /**
+     * This method is called to initialize the controller after the root element has been completely processed.
+     * It sets the current user and loads their friends list.
+     */
     @FXML
     public void initialize() {
         currentUser = Sesion.getInstance().getUser();
         loadFriendsList();
-
     }
 
-    private void loadFriendsList() {
+    /**
+     * Loads the list of friends for the current user and populates the ListView.
+     */
+    public void loadFriendsList() {
         if (currentUser == null) {
             System.out.println("No user is logged in.");
             return;
         }
-        friendsList.clear(); // Limpia la lista antes de cargar los amigos
-        List<User> friends = userDAO.getFriendsForUser(currentUser); // Método para obtener amigos
+        friendsList.clear();
+        List<User> friends = userDAO.getFriendsForUser(currentUser);
         friendsList.addAll(friends);
-        friendsListView.getItems().setAll(friendsList); // Actualiza la vista con los amigos
+        friendsListView.getItems().setAll(friendsList);
     }
+
+    /**
+     * Handles the selection of a friend from the ListView. If the user double-clicks on a friend,
+     * it starts a chat with that friend.
+     *
+     * @param event MouseEvent that triggered the selection (double-click).
+     */
     @FXML
     public void handleFriendSelected(MouseEvent event) {
-        if (event.getClickCount() == 2) { // Doble clic para iniciar el chat
+        if (event.getClickCount() == 2) {  // Double-click to start a chat
             User user = friendsListView.getSelectionModel().getSelectedItem();
 
             if (user != null) {
                 User selectedFriend = userDAO.findByName(user.getUsername());
                 if (selectedFriend != null) {
-                    startChatWithFriend(selectedFriend.getUsername()); // Envía el objeto User al iniciar el chat
+                    startChatWithFriend(selectedFriend.getUsername());  // Start chat with the selected friend
                 }
-            } else {
-                System.out.println("No friend selected.");
             }
         }
     }
-    public void openModal(Scenes scenes, String title, Controller controller, Object input) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(scenes.getURL())); // Usa scenes.getURL()
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle(title);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
 
-            if (controller != null) {
-                controller.onOpen(input);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Handles the action to add a new friend by opening the add friend modal.
+     */
     @FXML
     public void addFriend() throws IOException {
-        openModal(Scenes.ADDFRIEND, "Adding a friend", this, null);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(Scenes.ADDFRIEND.getURL()));
+        Parent root = loader.load();
+        AddFriendController addFriendController = loader.getController();
+        addFriendController.setMainController(this);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Adding a Friend");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
+
+    /**
+     * Handles the action to start a chat when the "Start Chat" button is clicked.
+     *
+     */
     @FXML
-    public void handleStartChatButton(ActionEvent actionEvent) {
+    public void handleStartChatButton() {
         User selectedFriend = friendsListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
             startChatWithFriend(selectedFriend.getUsername());
-        } else {
-            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a friend to chat with.");
         }
     }
 
+    /**
+     * Starts a chat with the selected friend by opening the chat window.
+     *
+     * @param friendName The name of the friend to chat with.
+     */
     @FXML
     public void startChatWithFriend(String friendName) {
-        showAlert(Alert.AlertType.INFORMATION, "Chat Started", "Starting chat with " + friendName + "...");
-
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Chat.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Scenes.CHAT.getURL()));
             Parent chatRoot = loader.load();
             ChatController chatController = loader.getController();
-            chatController.onOpen(new Object[]{currentUser, friendName});
+            chatController.onOpen(new Object[]{currentUser, friendName});  // Pass current user and friend to the chat
             Scene chatScene = new Scene(chatRoot);
             Stage currentStage = (Stage) startChatButton.getScene().getWindow();
             currentStage.setScene(chatScene);
@@ -122,53 +138,44 @@ public class MainController extends Controller {
             currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to start chat.");
         }
     }
 
+    /**
+     * Handles the logout action. Ends the current session and returns to the login view.
+     */
     @FXML
     public void handleLogout() {
         try {
-            // Cerrar la sesión
             Sesion.closeSession();
-
-            // Cargar la vista de inicio de sesión
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Scenes.LOGIN.getURL()));
             Parent loginRoot = loader.load();
-
-            // Obtener la escena actual y cambiarla a la nueva escena
-            Stage currentStage = (Stage) logoutButton.getScene().getWindow(); // Asegúrate de que "logoutButton" sea accesible
+            Stage currentStage = (Stage) logoutButton.getScene().getWindow();
             Scene loginScene = new Scene(loginRoot);
             currentStage.setScene(loginScene);
-            currentStage.setTitle("Login"); // Título de la ventana de inicio de sesión
+            currentStage.setTitle("Login");
             currentStage.show();
-
-            // Si necesitas obtener el controlador de la escena de inicio de sesión
-            LoginController loginController = loader.getController();
-            // Puedes realizar cualquier inicialización necesaria en el controlador de inicio de sesión aquí.
 
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load login scene.");
         }
     }
 
-
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
+    /**
+     * Method called when the main view is opened.
+     *
+     * @param input Optional input passed to the main controller.
+     */
     @Override
     public void onOpen(Object input) {
-        // Lógica cuando se abre la vista principal
     }
 
+    /**
+     * Method called when the main view is closed.
+     *
+     * @param output Optional output returned when the main view is closed.
+     */
     @Override
     public void onClose(Object output) {
-        // Lógica cuando se cierra la vista principal
     }
 }

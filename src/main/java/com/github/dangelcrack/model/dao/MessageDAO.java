@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO implementation for managing messages stored in an XML file.
+ */
 public class MessageDAO implements DAO<Message, String> {
-
     private final String xmlFilePath = "messages.xml";
     private Document document;
 
@@ -26,7 +28,9 @@ public class MessageDAO implements DAO<Message, String> {
         }
     }
 
-    // Cargar el archivo XML al inicializar el DAO
+    /**
+     * Load the XML file when initializing the DAO.
+     */
     private void loadXML() throws Exception {
         File xmlFile = new File(xmlFilePath);
         if (xmlFile.exists()) {
@@ -39,7 +43,9 @@ public class MessageDAO implements DAO<Message, String> {
         }
     }
 
-    // Crear una estructura XML básica si el archivo no existe
+    /**
+     * Create a basic XML structure if the file does not exist.
+     */
     private void createXML() throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -48,6 +54,10 @@ public class MessageDAO implements DAO<Message, String> {
         document.appendChild(root);
         saveXML();
     }
+
+    /**
+     * Save changes to the XML file.
+     */
     private void saveXML() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -62,9 +72,11 @@ public class MessageDAO implements DAO<Message, String> {
         try {
             Element root = document.getDocumentElement();
             Element messageElement = document.createElement("message");
+
             Element remitent = document.createElement("remitent");
             remitent.appendChild(document.createTextNode(message.getRemitent()));
             messageElement.appendChild(remitent);
+
             Element destinatary = document.createElement("destinatary");
             destinatary.appendChild(document.createTextNode(message.getDestinatary()));
             messageElement.appendChild(destinatary);
@@ -79,11 +91,8 @@ public class MessageDAO implements DAO<Message, String> {
 
             root.appendChild(messageElement);
 
-            // Guardar los cambios en el archivo XML
             saveXML();
-
             return message;
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -115,7 +124,7 @@ public class MessageDAO implements DAO<Message, String> {
 
     @Override
     public Message findByName(String identifier) {
-        // Aquí el identificador puede ser la combinación remitente + destinatario, o algún otro campo único
+        // The identifier can be the combination of remitent + destinatary, or some other unique field
         try {
             NodeList messages = document.getElementsByTagName("message");
             for (int i = 0; i < messages.getLength(); i++) {
@@ -161,6 +170,6 @@ public class MessageDAO implements DAO<Message, String> {
 
     @Override
     public void close() throws IOException {
-        // No es necesario hacer nada aquí ya que guardamos cada vez que modificamos el archivo
+        // No need to do anything here as we save each time we modify the file
     }
 }

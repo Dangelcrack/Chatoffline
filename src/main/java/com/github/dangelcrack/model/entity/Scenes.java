@@ -4,8 +4,10 @@ import com.github.dangelcrack.controller.AddFriendController;
 
 public enum Scenes {
     MAIN("/com/github/dangelcrack/view/Main.fxml"),
+    REGISTER("/com/github/dangelcrack/view/Register.fxml"),
     LOGIN("/com/github/dangelcrack/view/Login.fxml"),
-    ADDFRIEND("/com/github/dangelcrack/view/AddFriend.fxml");
+    ADDFRIEND("/com/github/dangelcrack/view/AddFriend.fxml"),
+    CHAT("/com/github/dangelcrack/view/Chat.fxml");
     private String url;
     /**
      * Constructor for the enum constant.
