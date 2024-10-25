@@ -24,8 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ChatController extends Controller {
@@ -231,7 +230,72 @@ public class ChatController extends Controller {
             return message;
         }
     }
+    /**
+     * Generates a comprehensive summary of the conversation between the current user and friend.
+     * The summary includes:
+     * - Total number of messages exchanged
+     * - Most common words in the conversation
+     * - Simple message length statistics
+     * - The user with the highest activity in the conversation
+     * - Optional metrics like the busiest time of day (if needed)
+     */
+    @FXML
+    private void handleGenerateConversationSummary() {
+        if (currentUser == null || friendName == null) {
+            showAlert(Alert.AlertType.ERROR, "Resumen no disponible", "Debe seleccionar un usuario y amigo para ver el resumen.");
+            return;
+        }
 
+        List<Message> allMessages = messageDAO.findAll();
+        List<Message> conversation = allMessages.stream()
+                .filter(m -> (m.getRemitent().equals(currentUser.getUsername()) && m.getDestinatary().equals(friendName)) ||
+                        (m.getRemitent().equals(friendName) && m.getDestinatary().equals(currentUser.getUsername())))
+                .collect(Collectors.toList());
+
+        // 1. Total number of messages
+        long totalMessages = conversation.size();
+
+        // 2. Most common words
+        Map<String, Long> wordFrequency = conversation.stream()
+                .flatMap(msg -> Arrays.stream(msg.getContains().toLowerCase().split("\\s+")))
+                .filter(word -> word.length() > 3)  // Filter out short words
+                .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
+
+        // Retrieve top 5 most common words
+        List<Map.Entry<String, Long>> mostCommonWords = wordFrequency.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toList());
+
+        // 3. Message length statistics
+        IntSummaryStatistics messageLengthStats = conversation.stream()
+                .mapToInt(msg -> msg.getContains().length())
+                .summaryStatistics();
+
+        // 4. Most active user
+        Map<String, Long> userMessageCount = conversation.stream()
+                .collect(Collectors.groupingBy(Message::getRemitent, Collectors.counting()));
+        String mostActiveUser = userMessageCount.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("N/A");
+
+        // Build the summary
+        StringBuilder summary = new StringBuilder();
+        summary.append("Resumen de la conversación:\n");
+        summary.append("Total de mensajes: ").append(totalMessages).append("\n");
+        summary.append("Longitud promedio del mensaje: ").append(messageLengthStats.getAverage()).append(" caracteres\n");
+        summary.append("Mensaje más largo: ").append(messageLengthStats.getMax()).append(" caracteres\n");
+        summary.append("Mensaje más corto: ").append(messageLengthStats.getMin()).append(" caracteres\n");
+        summary.append("Usuario más activo: ").append(mostActiveUser).append("\n");
+        summary.append("Palabras más comunes:\n");
+
+        mostCommonWords.forEach(entry ->
+                summary.append("Palabra: '").append(entry.getKey()).append("' - Frecuencia: ").append(entry.getValue()).append("\n"));
+
+        // Display the summary in an alert dialog
+        showAlert(Alert.AlertType.INFORMATION, "Resumen de la Conversación", summary.toString());
+    }
     /**
      * Displays an alert dialog to the user with the specified title and message.
      * The type of alert (information, error, etc.) is determined by the alertType parameter.
