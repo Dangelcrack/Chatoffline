@@ -156,6 +156,7 @@ public class ChatController extends Controller {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens a file dialog to let the user export the conversation history to a CSV file.
      * The default file name is set based on the current user and friend's name.
@@ -230,6 +231,7 @@ public class ChatController extends Controller {
             return message;
         }
     }
+
     /**
      * Generates a comprehensive summary of the conversation between the current user and friend.
      * The summary includes:
@@ -251,36 +253,24 @@ public class ChatController extends Controller {
                 .filter(m -> (m.getRemitent().equals(currentUser.getUsername()) && m.getDestinatary().equals(friendName)) ||
                         (m.getRemitent().equals(friendName) && m.getDestinatary().equals(currentUser.getUsername())))
                 .collect(Collectors.toList());
-
-        // 1. Total number of messages
         long totalMessages = conversation.size();
-
-        // 2. Most common words
         Map<String, Long> wordFrequency = conversation.stream()
                 .flatMap(msg -> Arrays.stream(msg.getContains().toLowerCase().split("\\s+")))
-                .filter(word -> word.length() > 3)  // Filter out short words
+                .filter(word -> word.length() > 3)
                 .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
-
-        // Retrieve top 5 most common words
         List<Map.Entry<String, Long>> mostCommonWords = wordFrequency.entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .limit(5)
                 .collect(Collectors.toList());
-
-        // 3. Message length statistics
         IntSummaryStatistics messageLengthStats = conversation.stream()
                 .mapToInt(msg -> msg.getContains().length())
                 .summaryStatistics();
-
-        // 4. Most active user
         Map<String, Long> userMessageCount = conversation.stream()
                 .collect(Collectors.groupingBy(Message::getRemitent, Collectors.counting()));
         String mostActiveUser = userMessageCount.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("N/A");
-
-        // Build the summary
         StringBuilder summary = new StringBuilder();
         summary.append("Resumen de la conversación:\n");
         summary.append("Total de mensajes: ").append(totalMessages).append("\n");
@@ -289,20 +279,18 @@ public class ChatController extends Controller {
         summary.append("Mensaje más corto: ").append(messageLengthStats.getMin()).append(" caracteres\n");
         summary.append("Usuario más activo: ").append(mostActiveUser).append("\n");
         summary.append("Palabras más comunes:\n");
-
         mostCommonWords.forEach(entry ->
                 summary.append("Palabra: '").append(entry.getKey()).append("' - Frecuencia: ").append(entry.getValue()).append("\n"));
-
-        // Display the summary in an alert dialog
         showAlert(Alert.AlertType.INFORMATION, "Resumen de la Conversación", summary.toString());
     }
+
     /**
      * Displays an alert dialog to the user with the specified title and message.
      * The type of alert (information, error, etc.) is determined by the alertType parameter.
      *
      * @param alertType the type of alert to show (e.g., information, error)
-     * @param title the title of the alert dialog
-     * @param message the message to display in the alert
+     * @param title     the title of the alert dialog
+     * @param message   the message to display in the alert
      */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
