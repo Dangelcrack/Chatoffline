@@ -7,11 +7,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,6 +27,7 @@ public class AddFriendController extends Controller implements Initializable {
     private TextField searchTextField;
     @FXML
     private ListView<String> usersListView;
+
     private UserDAO userDAO;
     private ObservableList<String> usersList;
     private User currentUser;
@@ -60,6 +66,7 @@ public class AddFriendController extends Controller implements Initializable {
             usersList.add(user.getUsername());
         }
     }
+
     @FXML
     public void handleSearchFriend() {
         currentUser = Sesion.getInstance().getUser();
@@ -74,23 +81,40 @@ public class AddFriendController extends Controller implements Initializable {
 
         loadUsersIntoListView(filteredUsers);
     }
+
     @FXML
     private void addFriendAndCloseWindow(Event event) {
         String selectedUser = usersListView.getSelectionModel().getSelectedItem();
         if (selectedUser != null && !selectedUser.isEmpty()) {
-            User friend = userDAO.findByName(selectedUser);
+            User friend = userDAO.findByName(selectedUser); // Busca al amigo por nombre
             if (friend != null && !currentUser.getFriends().contains(friend)) {
+                // Agrega al amigo en la lista de amigos del usuario actual
                 currentUser.addFriend(friend);
-                User friendNew = friend;
-                User userNew = currentUser;
-                friendNew.addFriend(userNew);
-                userDAO.delete(currentUser);
-                userDAO.delete(friend);
-                userDAO.save(userNew);
-                userDAO.save(friendNew);
+
+                // También agrega al usuario actual en la lista de amigos del amigo (bidireccional)
+                friend.addFriend(currentUser);
+
+                // Actualiza el almacenamiento para ambos usuarios
+                userDAO.save(currentUser); // Guarda el usuario actual con la lista de amigos actualizada
+                userDAO.save(friend);      // Guarda al amigo con la lista de amigos actualizada
+
+                // Recargar la lista de amigos en la interfaz
                 mainController.loadFriendsList();
             }
         }
-        ((Node) (event.getSource())).getScene().getWindow().hide();
+
+        // Regresa a la escena principal en lugar de cerrar la ventana
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Main.fxml"));
+            Parent mainRoot = loader.load();
+
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.setScene(new Scene(mainRoot));
+            currentStage.setTitle("Main");
+            currentStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
