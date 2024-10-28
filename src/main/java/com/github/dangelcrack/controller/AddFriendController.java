@@ -56,10 +56,9 @@ public class AddFriendController extends Controller implements Initializable {
 
     private void loadUsersIntoListView(List<User> users) {
         usersList.clear();
-        // Filtra los usuarios antes de añadirlos a la lista
         List<User> filteredUsers = users.stream()
-                .filter(user -> !user.getUsername().equalsIgnoreCase(currentUser.getUsername())) // Excluir al usuario actual
-                .filter(user -> !currentUser.getFriends().contains(user)) // Excluir amigos
+                .filter(user -> !user.getUsername().equalsIgnoreCase(currentUser.getUsername()))
+                .filter(user -> !currentUser.getFriends().contains(user))
                 .collect(Collectors.toList());
 
         for (User user : filteredUsers) {
@@ -86,24 +85,15 @@ public class AddFriendController extends Controller implements Initializable {
     private void addFriendAndCloseWindow(Event event) {
         String selectedUser = usersListView.getSelectionModel().getSelectedItem();
         if (selectedUser != null && !selectedUser.isEmpty()) {
-            User friend = userDAO.findByName(selectedUser); // Busca al amigo por nombre
+            User friend = userDAO.findByName(selectedUser);
             if (friend != null && !currentUser.getFriends().contains(friend)) {
-                // Agrega al amigo en la lista de amigos del usuario actual
                 currentUser.addFriend(friend);
-
-                // También agrega al usuario actual en la lista de amigos del amigo (bidireccional)
                 friend.addFriend(currentUser);
-
-                // Actualiza el almacenamiento para ambos usuarios
-                userDAO.save(currentUser); // Guarda el usuario actual con la lista de amigos actualizada
-                userDAO.save(friend);      // Guarda al amigo con la lista de amigos actualizada
-
-                // Recargar la lista de amigos en la interfaz
+                userDAO.save(currentUser);
+                userDAO.save(friend);
                 mainController.loadFriendsList();
             }
         }
-
-        // Regresa a la escena principal en lugar de cerrar la ventana
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Main.fxml"));
             Parent mainRoot = loader.load();

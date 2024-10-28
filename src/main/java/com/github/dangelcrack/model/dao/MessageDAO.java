@@ -124,7 +124,6 @@ public class MessageDAO implements DAO<Message, String> {
 
     @Override
     public Message findByName(String identifier) {
-        // The identifier can be the combination of remitent + destinatary, or some other unique field
         try {
             NodeList messages = document.getElementsByTagName("message");
             for (int i = 0; i < messages.getLength(); i++) {

@@ -22,18 +22,18 @@ import java.util.Collections;
 public class RegisterController extends Controller {
 
     @FXML
-    private TextField usernameField;  // Field to input username
+    private TextField usernameField;
 
     @FXML
-    private PasswordField passwordField;  // Field to input password
+    private PasswordField passwordField;
 
-    private UserDAO userDAO;  // Data Access Object for managing user data
+    private UserDAO userDAO;
 
     /**
      * Constructor that initializes the UserDAO for user management.
      */
     public RegisterController() {
-        userDAO = new UserDAO();  // Initialize the DAO for managing users
+        userDAO = new UserDAO();
     }
 
     /**
@@ -47,21 +47,13 @@ public class RegisterController extends Controller {
     public void handleRegister(ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
-        // Check if the username already exists
         if (userDAO.findByName(username) != null) {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "Username already exists.");
             return;
         }
-
-        // Register the new user
         User newUser = new User(username, password, Collections.emptyList(), Collections.emptyList());  // Initialize friends list as empty
         userDAO.save(newUser);
-
-        // Show success message
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully.");
-
-        // Redirect to the login screen after successful registration
         openLoginView(actionEvent);
     }
 

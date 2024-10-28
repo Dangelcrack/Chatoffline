@@ -74,20 +74,15 @@ public class UserDAO implements DAO<User, String> {
     public User save(User user) {
         try {
             Element root = document.getDocumentElement();
-
-            // Buscar un nodo de usuario existente con el mismo nombre de usuario
             NodeList userList = root.getElementsByTagName("user");
             for (int i = 0; i < userList.getLength(); i++) {
                 Element existingUser = (Element) userList.item(i);
                 Element usernameElement = (Element) existingUser.getElementsByTagName("username").item(0);
                 if (usernameElement != null && usernameElement.getTextContent().equals(user.getUsername())) {
-                    // Si encontramos un usuario con el mismo nombre, eliminamos el nodo
                     root.removeChild(existingUser);
                     break;
                 }
             }
-
-            // Crear un nuevo nodo de usuario
             Element userElement = document.createElement("user");
 
             Element username = document.createElement("username");
@@ -114,8 +109,6 @@ public class UserDAO implements DAO<User, String> {
                 friendsElement.appendChild(friendElement);
             }
             userElement.appendChild(friendsElement);
-
-            // Agregar el nuevo nodo de usuario al documento
             root.appendChild(userElement);
             saveXML();
             return user;
