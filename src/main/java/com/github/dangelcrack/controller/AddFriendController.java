@@ -1,6 +1,7 @@
 package com.github.dangelcrack.controller;
 
 import com.github.dangelcrack.model.dao.UserDAO;
+import com.github.dangelcrack.model.entity.Scenes;
 import com.github.dangelcrack.model.entity.User;
 import com.github.dangelcrack.model.repo.Sesion;
 import javafx.collections.FXCollections;
@@ -95,9 +96,8 @@ public class AddFriendController extends Controller implements Initializable {
             }
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/dangelcrack/view/Main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Scenes.MAIN.getURL()));
             Parent mainRoot = loader.load();
-
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.setScene(new Scene(mainRoot));
             currentStage.setTitle("Main");
